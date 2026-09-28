@@ -1,0 +1,100 @@
+:root {
+	font-family: 'Lato', Arial, Helvetica, sans-serif;
+	color: #222;
+}
+
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.modal {
+    z-index: 9999;
+    isolation: isolate;
+}
+
+.overlay {
+    background: rgba(57, 62, 70, 0.55);
+    z-index: 0;
+}
+
+.delete-content {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 2px;
+    width: 598px;
+    height: 240px;
+    z-index: 1;
+}
+
+.delete-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #808080;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.delete-description {
+    font-size: 16px;
+    color: #808080;
+    position: absolute;
+    top: 88px;
+    left: 30px;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.delete-action {
+    background: #CC4B37;
+    color: #fff;
+    padding: 0px 20px;
+    border-radius: 2px;
+    position: absolute;
+    width: 165px;
+    height: 48px;
+    top: 162px;
+    left: 403px;
+}
+
+.delete-action {
+    background: #CC4B37;
+    color: #fff;
+    padding: 9px 24px;
+    border-radius: 2px;
+}
+
+@media (max-width: 760px) {
+    .modal-content {
+        top: 50%;
+        padding: 22px 14px;
+    }
+
+    .modal-title {
+        font-size: 30px;
+    }
+
+    .switch-option {
+        font-size: 20px;
+        min-width: 0;
+        flex: 1;
+    }
+}
