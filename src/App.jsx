@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import DiscountPopup from './components/AddDiscountPopup/DiscountPopup'
+import DeleteDiscount from './components/DeleteDiscount/DeleteDiscount'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import discountOverview from './assets/discountOverview.png'; 
@@ -51,6 +53,76 @@ function App() {
   ]
 
   const [discounts, setDiscounts] = useState(initialDiscounts)
+  const [editPopup, setEditPopup] = useState(false)
+  const [discountItem, setDiscountItem] = useState({})
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [discountToDelete, setDiscountToDelete] = useState(null)
+
+  const onEditDiscount = (item) => {
+    setEditPopup(true)
+    setDiscountItem(item)
+  }
+
+  const handleAddDiscount = ({ appliesTo, valueType, discountValue, durationMonths, description }) => {
+    const numericDiscountValue = Number(discountValue)
+    const parsedDuration = appliesTo === 'monthly' && durationMonths !== '' ? Number(durationMonths) : null
+
+    const newDiscount = {
+      id: crypto.randomUUID(),
+      name: description?.trim(),
+      value: formatDiscountLabel({
+        discountValue: numericDiscountValue,
+        valueType,
+        appliesTo,
+        durationMonths: parsedDuration,
+      }),
+      discountValue: numericDiscountValue,
+      editable: true,
+      active: true,
+      appliesTo,
+      valueType,
+      durationMonths: parsedDuration,
+      isUserAdded: true,
+    }
+
+    setDiscounts((prev) => [...prev, newDiscount])
+  }
+
+  const handleUpdateDiscount = ({ id, appliesTo, valueType, discountValue, durationMonths, name }) => {
+    const numericDiscountValue = Number(discountValue)
+    const parsedDuration =
+      appliesTo === 'monthly' && durationMonths !== '' && durationMonths !== null
+        ? Number(durationMonths)
+        : null
+
+    setDiscounts((prev) =>
+      prev.map((discount) => {
+        if (discount.id !== id) {
+          return discount
+        }
+
+        return {
+          ...discount,
+          name: name ?? discount.name,
+          discountValue: numericDiscountValue,
+          valueType,
+          appliesTo,
+          durationMonths: parsedDuration,
+          value: formatDiscountLabel({
+            discountValue: numericDiscountValue,
+            valueType,
+            appliesTo,
+            durationMonths: parsedDuration,
+          }),
+        }
+      }),
+    )
+  }
+
+  const handleDeleteDiscount = (id) => {
+    setIsDeleteModalOpen(true);
+    setDiscountToDelete(id);
+  }
 
   const activeDiscounts = discounts.filter((discount) => discount.active)
   const activeOneTimeDiscounts = activeDiscounts.filter((discount) => discount.appliesTo === 'oneTime')
@@ -99,12 +171,27 @@ function App() {
         <button className="prev-button top cursor-pointer" onClick={() => alert('Go to Previous page')}>Previous</button>
         <div className="discounts-card">
             <h2 className="card-title">Discounts</h2>
+            <DiscountPopup
+              baseOneTimePrice={BASE_ONE_TIME_PRICE}
+              baseMonthlyPrice={BASE_MONTHLY_PRICE}
+              onAddDiscount={handleAddDiscount}
+              onUpdateDiscount={handleUpdateDiscount}
+              editPopup={editPopup}
+              setEditPopup={setEditPopup}
+              discountItem={discountItem}
+            />
+            <DeleteDiscount
+              isDeleteModalOpen={isDeleteModalOpen}
+              setIsDeleteModalOpen={setIsDeleteModalOpen}
+              setDiscounts={setDiscounts}
+              discountToDelete={discountToDelete}
+            />
           <ul className="discount-list">
             {discounts.map((item, index) => (
               <li key={index} className="discount-row">
                 <span className="discount-name">{item.name}</span>
                 <span className={`discount-value-wrap ${item.editable && !item.isUserAdded && 'editable'}`}>
-                  {item.editable && !item.isUserAdded && <button onClick={() => console.log('Edit discount')} className="icon-action edit-icon cursor-pointer"><FontAwesomeIcon icon={faPen} /></button>}
+                  {item.editable && !item.isUserAdded && <button onClick={() => onEditDiscount(item)} className="icon-action edit-icon cursor-pointer"><FontAwesomeIcon icon={faPen} /></button>}
                   <span className="discount-value">{item.value}</span>
                 </span>
 
@@ -114,7 +201,7 @@ function App() {
                       type="button"
                       className="icon-action cursor-pointer"
                       aria-label={`edit ${item.name}`}
-                      onClick={() => console.log('Edit discount')}
+                      onClick={() => onEditDiscount(item)}
                     >
                       <FontAwesomeIcon icon={faPen} className="row-icons"/>
                     </button>
@@ -122,7 +209,7 @@ function App() {
                       type="button"
                       className="icon-action cursor-pointer"
                       aria-label={`delete ${item.name}`}
-                      onClick={() => console.log('Delete discount')}
+                      onClick={() => handleDeleteDiscount(item.id)}
                     >
                       <FontAwesomeIcon icon={faTrash} className="row-icons"/>
                     </button>

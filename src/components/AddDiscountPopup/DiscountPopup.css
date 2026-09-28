@@ -1,0 +1,256 @@
+:root {
+	font-family: 'Lato', Arial, Helvetica, sans-serif;
+	color: #222;
+}
+
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.modal {
+    z-index: 9999;
+    isolation: isolate;
+}
+
+.overlay {
+    background: rgba(57, 62, 70, 0.55);
+    z-index: 0;
+}
+
+.modal-content {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 2px;
+    width: 764px;
+    z-index: 1;
+}
+
+.modal-title {
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2f343a;
+}
+
+.modal-label {
+    margin: 0 0 12px;
+    font-size: 16px;
+    color: #444;
+}
+
+.price-type-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.switch-option {
+    border: none;
+    background: #e6e6e6;
+    color: #666;
+    min-width: 181px;
+    height: 66px;
+    border-radius: 9px;
+    padding: 0 18px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 140ms ease;
+}
+
+.switch-option.selected {
+    background: #22bfdc;
+    color: #fff;
+}
+
+.switch-option:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.switch-dot {
+    width: 20px;
+    height: 20px;
+}
+
+.switch-option:not(.selected) .switch-dot {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.modal-field-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #3e3e3e;
+    font-size: 16px;
+}
+
+.inline-field {
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 0;
+    margin-bottom: 16px;
+}
+
+.discount-type-select-wrap {
+    position: relative;
+    width: 66px;
+}
+
+.discount-type-select,
+.modal-input {
+    height: 40px;
+    width: 724px;
+    border: 1px solid #CACACA;
+    border-radius: 0;
+    padding: 6px 10px;
+    font-size: 16px;
+    color: #30343a;
+    outline: none;
+}
+
+.modal-input:disabled {
+    color: #767676;
+    cursor: not-allowed;
+}
+
+.discount-type-select {
+    width: 66px;
+    background: #f8f8f8;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 6px 24px 6px 14px;
+}
+
+.discount-type-arrow {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.discount-type-arrow-icon {
+    margin-top: -4px;
+    color: #8a8f96;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.modal-input:focus,
+.discount-type-select:focus {
+    border-color: #22bfdc;
+    box-shadow: 0 0 0 2px rgba(34, 191, 220, 0.14);
+}
+
+.suffix-field {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.suffix-field .modal-input {
+    width: 724px;
+}
+
+.field-suffix {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #444;
+    font-size: 16px;
+}
+
+.modal-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-action {
+    border: none;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.cancel-action {
+	color: #16c4e2;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	border: none;
+	background: transparent;
+	padding: 6px 8px;
+	transition: color 0.18s ease, background-color 0.18s ease, transform 0.12s ease;
+}
+
+.cancel-action:hover {
+	color: #0ea8c3;
+	background: rgba(22, 196, 226, 0.08);
+}
+
+.cancel-action:active {
+	transform: scale(0.98);
+}
+
+.add-action {
+    background: #22bfdc;
+    color: #fff;
+    padding: 9px 24px;
+    border-radius: 2px;
+}
+
+.add-action:hover {
+    background: #1aa9c3;
+}
+
+.add-action:focus-visible,
+.switch-option:focus-visible {
+    outline: 2px solid #22bfdc;
+    outline-offset: 2px;
+}
+
+.max-discount {
+    font-style: italic;
+    color: #767676;
+    font-size: 13px;
+    width: 170px;
+    font-weight: 400;
+    margin-top: 3px;
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    .modal-content {
+        top: 50%;
+        padding: 22px 14px;
+    }
+
+    .modal-title {
+        font-size: 30px;
+    }
+
+    .switch-option {
+        font-size: 20px;
+        min-width: 0;
+        flex: 1;
+    }
+}
