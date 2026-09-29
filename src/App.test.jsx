@@ -73,7 +73,7 @@ describe('discount workflows', () => {
     expect(globalThis.fetch).toHaveBeenCalledWith('/discounts.json')
   })
 
-  it('edits and deletes a user-added discount', async () => {
+  it('edits and deletes a user added discount', async () => {
     const user = userEvent.setup()
     render(<App />)
 
