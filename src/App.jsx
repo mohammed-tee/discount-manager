@@ -94,7 +94,7 @@ function App() {
           setDiscounts(data.map((discount, index) => normalizeDiscount(discount, index)))
           setDiscountsError('')
         }
-      } catch (error) {
+      } catch {
         if (isMounted) {
           setDiscountsError('Could not load discounts. Please refresh and try again.')
         }

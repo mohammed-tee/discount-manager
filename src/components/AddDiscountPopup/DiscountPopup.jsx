@@ -22,13 +22,8 @@ export default function DiscountPopup({
     const [durationMonths, setDurationMonths] = useState('')
     const [description, setDescription] = useState('')
 
-    const basePrices = {
-        oneTime: baseOneTimePrice,
-        monthly: baseMonthlyPrice,
-    }
-
     const newPrice = useMemo(() => {
-        const basePrice = basePrices[appliesTo]
+        const basePrice = appliesTo === 'oneTime' ? baseOneTimePrice : baseMonthlyPrice
         const value = Number(discountValue) || 0
 
         const discountAmount = valueType === 'percentage'
@@ -36,7 +31,7 @@ export default function DiscountPopup({
             : value
 
         return Math.max(basePrice - discountAmount, 0)
-    }, [appliesTo, discountValue, valueType])
+    }, [appliesTo, discountValue, valueType, baseOneTimePrice, baseMonthlyPrice])
 
     const formattedPrice = new Intl.NumberFormat('nl-NL', {
         style: 'currency',
