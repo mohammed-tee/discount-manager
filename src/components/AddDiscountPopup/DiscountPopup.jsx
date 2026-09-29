@@ -8,6 +8,7 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons/faCircleCheck'
 export default function DiscountPopup({
     baseOneTimePrice,
     baseMonthlyPrice,
+    canAddDiscount = true,
     onAddDiscount,
     onUpdateDiscount,
     editPopup,
@@ -143,10 +144,16 @@ export default function DiscountPopup({
     return (
         <>
         <div className="card-toolbar">
-            <button className="manual-discount-btn cursor-pointer" type="button" onClick={togglePopup}>
-              <span className="plus">+</span>
-              Add manual discount
-            </button>
+            {canAddDiscount && (
+                <button
+                    className="manual-discount-btn cursor-pointer"
+                    type="button"
+                    onClick={togglePopup}
+                >
+                <span className="plus">+</span>
+                Add manual discount
+                </button>
+            )}
           </div>
         {isOpen && (
         <div className="modal">
@@ -236,7 +243,7 @@ export default function DiscountPopup({
                     </>
                 )}
 
-                <div className="modal-actions">
+                <div className="modal-actions" style={{ justifyContent: !editPopup ? 'space-between' : 'flex-end' }}>
                     <button
                         type="button"
                         className="cancel-action cursor-pointer"

@@ -1,0 +1,90 @@
+[
+  {
+    "id": "1",
+    "name": "Discount name",
+    "discountValue": 250,
+    "editable": false,
+    "active": true,
+    "appliesTo": "oneTime",
+    "valueType": "amount",
+    "durationMonths": null,
+    "isUserAdded": false
+  },
+  {
+    "id": "2",
+    "name": "Discount name",
+    "discountValue": 5,
+    "editable": true,
+    "active": false,
+    "appliesTo": "oneTime",
+    "valueType": "percentage",
+    "durationMonths": null,
+    "isUserAdded": false
+  },
+  {
+    "id": "3",
+    "name": "Discount name",
+    "discountValue": 250,
+    "editable": false,
+    "active": false,
+    "appliesTo": "monthly",
+    "valueType": "amount",
+    "durationMonths": null,
+    "isUserAdded": false
+  },
+  {
+    "id": "4",
+    "name": "Discount name",
+    "discountValue": 25,
+    "editable": false,
+    "active": false,
+    "appliesTo": "monthly",
+    "valueType": "percentage",
+    "durationMonths": 3,
+    "isUserAdded": false
+  },
+  {
+    "id": "5",
+    "name": "Discount name",
+    "discountValue": 250,
+    "editable": false,
+    "active": false,
+    "appliesTo": "oneTime",
+    "valueType": "amount",
+    "durationMonths": null,
+    "isUserAdded": false
+  },
+  {
+    "id": "6",
+    "name": "Discount name",
+    "discountValue": 50,
+    "editable": true,
+    "active": false,
+    "appliesTo": "monthly",
+    "valueType": "amount",
+    "durationMonths": 3,
+    "isUserAdded": false
+  },
+  {
+    "id": "7",
+    "name": "Discount name",
+    "discountValue": 25,
+    "editable": false,
+    "active": false,
+    "appliesTo": "oneTime",
+    "valueType": "percentage",
+    "durationMonths": null,
+    "isUserAdded": false
+  },
+  {
+    "id": "8",
+    "name": "Discount name",
+    "discountValue": 25,
+    "editable": false,
+    "active": false,
+    "appliesTo": "monthly",
+    "valueType": "percentage",
+    "durationMonths": null,
+    "isUserAdded": false
+  }
+]
