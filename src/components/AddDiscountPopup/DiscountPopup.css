@@ -169,19 +169,9 @@ body.active-modal {
     width: 724px;
 }
 
-.field-suffix {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #444;
-    font-size: 16px;
-}
-
 .modal-actions {
     margin-top: 24px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -192,13 +182,14 @@ body.active-modal {
 }
 
 .cancel-action {
-	color: #16c4e2;
+	color: #26B7CD;
 	display: inline-flex;
 	align-items: center;
-	gap: 10px;
-	border: none;
-	background: transparent;
-	padding: 6px 8px;
+    font-size: 14px;
+    justify-content: center;
+	padding: 0px 16px;
+    width: 74px;
+    height: 40px;
 	transition: color 0.18s ease, background-color 0.18s ease, transform 0.12s ease;
 }
 
@@ -214,8 +205,11 @@ body.active-modal {
 .add-action {
     background: #22bfdc;
     color: #fff;
-    padding: 9px 24px;
+    padding: 0px 16px;
     border-radius: 2px;
+    width: 62px;
+    height: 40px;
+    font-size: 14px;
 }
 
 .add-action:hover {
@@ -236,21 +230,4 @@ body.active-modal {
     font-weight: 400;
     margin-top: 3px;
     white-space: nowrap;
-}
-
-@media (max-width: 760px) {
-    .modal-content {
-        top: 50%;
-        padding: 22px 14px;
-    }
-
-    .modal-title {
-        font-size: 30px;
-    }
-
-    .switch-option {
-        font-size: 20px;
-        min-width: 0;
-        flex: 1;
-    }
 }

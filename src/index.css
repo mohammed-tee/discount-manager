@@ -68,7 +68,7 @@ body {
 }
 
 .manual-discount-btn {
-	color: #16c4e2;
+	color: #26B7CD;
 	font-size: 14px;
 	display: inline-flex;
 	align-items: center;
@@ -82,17 +82,6 @@ body {
 .manual-discount-btn:hover {
 	color: #0ea8c3;
 	background: rgba(22, 196, 226, 0.08);
-}
-
-.manual-discount-btn:active {
-	transform: scale(0.98);
-}
-
-.plus {
-	font-size: 16px;
-    width: 15px;
-    height: 15px;
-	line-height: 1;
 }
 
 .discount-list {
@@ -161,7 +150,7 @@ body {
 }
 
 .toggle.active {
-	background: #16c4e2;
+	background: #26B7CD;
 }
 
 .toggle:hover {
@@ -219,7 +208,7 @@ body {
 
 .next-button {
 	border: none;
-	background: #16c4e2;
+	background: #26B7CD;
 	color: #fff;
 	font-size: 14px;
     width: 62px;
@@ -229,10 +218,6 @@ body {
 
 .next-button:hover {
 	background: #0fb5d2;
-}
-
-.next-button:active {
-	transform: translateY(1px) scale(0.99);
 }
 
 .summary-panel {
@@ -303,7 +288,7 @@ body {
 }
 
 .link {
-	color: #16c4e2;
+	color: #26B7CD;
 	text-decoration: none;
     font-size: 14px;
 	transition: color 0.18s ease, text-decoration-color 0.18s ease;
@@ -323,14 +308,4 @@ body {
 .link:focus-visible {
 	outline: 3px solid rgba(22, 196, 226, 0.45);
 	outline-offset: 2px;
-}
-
-@media (max-width: 1180px) {
-	.page {
-		grid-template-columns: 1fr;
-	}
-
-	.summary-panel {
-		max-width: 400px;
-	}
 }

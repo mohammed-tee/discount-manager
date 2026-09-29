@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DiscountPopup from './components/AddDiscountPopup/DiscountPopup'
 import DeleteDiscount from './components/DeleteDiscount/DeleteDiscount'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,6 +9,10 @@ const BASE_ONE_TIME_PRICE = 1000
 const BASE_MONTHLY_PRICE = 10
 const CONTRACT_MONTHS = 12
 const INTRO_MONTHS = 3
+const DISCOUNTS_ENDPOINT = '/discounts.json'
+const PERMISSIONS = {
+  addDiscount: true,
+}
 
 const currencyFormatter = new Intl.NumberFormat('nl-NL', {
   style: 'currency',
@@ -40,23 +44,73 @@ const calculateDiscountAmount = (basePrice, discount) => {
   return discount.discountValue
 }
 
-function App() {
-  const initialDiscounts = [
-  { id: '1', name: 'Discount name', value: '- € 250,00 one time', discountValue: 250, editable: false, active: true, appliesTo: 'oneTime', valueType: 'amount', durationMonths: null, isUserAdded: false },
-  { id: '2', name: 'Discount name', value: '- 5 % one time', discountValue: 5, editable: true, active: false, appliesTo: 'oneTime', valueType: 'percentage', durationMonths: null, isUserAdded: false },
-  { id: '3', name: 'Discount name', value: '- € 250,00 monthly', discountValue: 250, editable: false, active: false, appliesTo: 'monthly', valueType: 'amount', durationMonths: null, isUserAdded: false },
-  { id: '4', name: 'Discount name', value: '- 25 % monthly first 3 months', discountValue: 25, editable: false, active: false, appliesTo: 'monthly', valueType: 'percentage', durationMonths: INTRO_MONTHS, isUserAdded: false },
-  { id: '5', name: 'Discount name', value: '- € 250,00 one time', discountValue: 250, editable: false, active: false, appliesTo: 'oneTime', valueType: 'amount', durationMonths: null, isUserAdded: false },
-  { id: '6', name: 'Discount name', value: '- € 50,00 monthly first 3 months', discountValue: 50, editable: true, active: false, appliesTo: 'monthly', valueType: 'amount', durationMonths: INTRO_MONTHS, isUserAdded: false },
-  { id: '7', name: 'Discount name', value: '- 25 % one time', discountValue: 25, editable: false, active: false, appliesTo: 'oneTime', valueType: 'percentage', durationMonths: null, isUserAdded: false },
-  { id: '8', name: 'Discount name', value: '- 25 % monthly', discountValue: 25, editable: false, active: false, appliesTo: 'monthly', valueType: 'percentage', durationMonths: null, isUserAdded: false },
-  ]
+const fetchDiscounts = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 400))
+  const response = await fetch(DISCOUNTS_ENDPOINT)
 
-  const [discounts, setDiscounts] = useState(initialDiscounts)
+  if (!response.ok) {
+    throw new Error(`Failed to fetch discounts (${response.status})`)
+  }
+
+  return response.json()
+}
+
+const normalizeDiscount = (discount, index) => ({
+  id: String(discount.id ?? crypto.randomUUID()),
+  name: discount.name?.trim() || `Discount ${index + 1}`,
+  discountValue: Number(discount.discountValue) || 0,
+  editable: Boolean(discount.editable),
+  active: Boolean(discount.active),
+  appliesTo: discount.appliesTo === 'oneTime' ? 'oneTime' : 'monthly',
+  valueType: discount.valueType === 'amount' ? 'amount' : 'percentage',
+  durationMonths:
+    discount.appliesTo === 'monthly' && discount.durationMonths !== '' && discount.durationMonths !== null
+      ? Number(discount.durationMonths)
+      : null,
+  isUserAdded: Boolean(discount.isUserAdded),
+})
+
+function App() {
+  const [discounts, setDiscounts] = useState([])
+  const [isLoadingDiscounts, setIsLoadingDiscounts] = useState(true)
+  const [discountsError, setDiscountsError] = useState('')
   const [editPopup, setEditPopup] = useState(false)
   const [discountItem, setDiscountItem] = useState({})
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [discountToDelete, setDiscountToDelete] = useState(null)
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadDiscounts = async () => {
+      try {
+        const data = await fetchDiscounts()
+
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid discounts response')
+        }
+
+        if (isMounted) {
+          setDiscounts(data.map((discount, index) => normalizeDiscount(discount, index)))
+          setDiscountsError('')
+        }
+      } catch (error) {
+        if (isMounted) {
+          setDiscountsError('Could not load discounts. Please refresh and try again.')
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingDiscounts(false)
+        }
+      }
+    }
+
+    loadDiscounts()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const onEditDiscount = (item) => {
     setEditPopup(true)
@@ -70,12 +124,6 @@ function App() {
     const newDiscount = {
       id: crypto.randomUUID(),
       name: description?.trim(),
-      value: formatDiscountLabel({
-        discountValue: numericDiscountValue,
-        valueType,
-        appliesTo,
-        durationMonths: parsedDuration,
-      }),
       discountValue: numericDiscountValue,
       editable: true,
       active: true,
@@ -108,12 +156,6 @@ function App() {
           valueType,
           appliesTo,
           durationMonths: parsedDuration,
-          value: formatDiscountLabel({
-            discountValue: numericDiscountValue,
-            valueType,
-            appliesTo,
-            durationMonths: parsedDuration,
-          }),
         }
       }),
     )
@@ -174,6 +216,7 @@ function App() {
             <DiscountPopup
               baseOneTimePrice={BASE_ONE_TIME_PRICE}
               baseMonthlyPrice={BASE_MONTHLY_PRICE}
+              canAddDiscount={PERMISSIONS.addDiscount}
               onAddDiscount={handleAddDiscount}
               onUpdateDiscount={handleUpdateDiscount}
               editPopup={editPopup}
@@ -187,12 +230,21 @@ function App() {
               discountToDelete={discountToDelete}
             />
           <ul className="discount-list">
-            {discounts.map((item, index) => (
-              <li key={index} className="discount-row">
+            {isLoadingDiscounts && <li className="discount-row">Loading discounts...</li>}
+            {!isLoadingDiscounts && discountsError && <li className="discount-row">{discountsError}</li>}
+            {!isLoadingDiscounts && !discountsError && discounts.map((item) => (
+              <li key={item.id} className="discount-row">
                 <span className="discount-name">{item.name}</span>
                 <span className={`discount-value-wrap ${item.editable && !item.isUserAdded && 'editable'}`}>
                   {item.editable && !item.isUserAdded && <button onClick={() => onEditDiscount(item)} className="icon-action edit-icon cursor-pointer"><FontAwesomeIcon icon={faPen} /></button>}
-                  <span className="discount-value">{item.value}</span>
+                  <span className="discount-value">
+                    {formatDiscountLabel({
+                      discountValue: item.discountValue,
+                      valueType: item.valueType,
+                      appliesTo: item.appliesTo,
+                      durationMonths: item.durationMonths,
+                    })}
+                  </span>
                 </span>
 
                 {item.isUserAdded ? (
@@ -222,8 +274,8 @@ function App() {
                     aria-label={`toggle ${item.name}`}
                     onClick={() => {
                       setDiscounts((prev) =>
-                        prev.map((discount, i) =>
-                          i === index ? { ...discount, active: !discount.active } : discount,
+                        prev.map((discount) =>
+                          discount.id === item.id ? { ...discount, active: !discount.active } : discount,
                         ),
                       )
                     }}
